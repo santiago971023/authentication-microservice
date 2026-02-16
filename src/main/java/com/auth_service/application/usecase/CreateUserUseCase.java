@@ -22,7 +22,7 @@ public class CreateUserUseCase implements UserInputPort {
                         if(exists) {
                             return Mono.error(new RuntimeException("The email already exists"));
                         }
-                        return userRepositoryOutPort.saveUser(user);
+                        return userRepositoryOutPort.save(user);
         });
     }
 }
