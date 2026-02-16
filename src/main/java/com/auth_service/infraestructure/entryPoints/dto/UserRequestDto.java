@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record UserRequestDto(
+
         @NotBlank(message = "El DNI es obligatorio.")
+        @Pattern(regexp = "^\\d+$", message = "El campo 'dni' solo debe contener números.")
          String dni,
 
         @NotBlank(message = "El campo 'name' no puede ser nulo o vacío.")
