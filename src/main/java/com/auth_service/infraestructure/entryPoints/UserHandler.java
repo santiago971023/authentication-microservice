@@ -4,10 +4,13 @@ import com.auth_service.application.ports.in.UserInputPort;
 import com.auth_service.infraestructure.entryPoints.dto.UserRequestDto;
 import com.auth_service.infraestructure.mapper.UserRestMapper;
 import com.auth_service.infraestructure.shared.RequestValidator;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
 
 @Component
 public class UserHandler {
@@ -22,10 +25,20 @@ public class UserHandler {
     }
 
     public Mono<ServerResponse> createUser(ServerRequest serverRequest){
+        // 1. Convertir el body (JSON) a DTO
         return serverRequest.bodyToMono(UserRequestDto.class)
-                .flatMap(requestValidator::validate)
-                .flatMap(userDto -> userInputPort.saveUser(userRestMapper.toDomain(userDto))
-                        .flatMap(user -> ServerResponse.ok().bodyValue(userRestMapper.toResponse(user)))
+                // 2. Aquí vamos a tener que validar el DTO
+
+                // 3. Convertir DTO a Dominio y llamar al Caso de Uso (por medio del puerto)
+                .map(userRestMapper::toDomain)
+                .flatMap(userInputPort::saveUser)
+
+                // 4.  Converttirmos respuesta Domain a DTO y respondemos CREATED
+                .map(userRestMapper::toResponse)
+                .flatMap(userResponse -> ServerResponse
+                        .created(URI.create("/api/users/" + userResponse.id()))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(userResponse)
                 );
     }
 }
