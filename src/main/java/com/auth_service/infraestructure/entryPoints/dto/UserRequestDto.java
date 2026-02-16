@@ -28,6 +28,8 @@ public record UserRequestDto(
         @DecimalMax(value = "15000000.0", message = "El salario base no puede exceder los 15,000,000.")
          BigDecimal baseSalary,
 
+         String role,
+
          @Email(message = "El formato del 'email' no es válido.")
         @NotBlank(message = "El campo email no puede estar vacío")
          String email,
