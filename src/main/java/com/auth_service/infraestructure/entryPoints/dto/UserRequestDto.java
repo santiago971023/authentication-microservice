@@ -1,4 +1,4 @@
-package com.auth_service.infraestructure.dto;
+package com.auth_service.infraestructure.entryPoints.dto;
 
 import jakarta.validation.constraints.*;
 
@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record UserRequestDto(
-        @NotBlank
+        @NotBlank(message = "El DNI es obligatorio.")
          String dni,
 
         @NotBlank(message = "El campo 'name' no puede ser nulo o vacío.")
@@ -18,7 +18,8 @@ public record UserRequestDto(
          String lastname,
 
 
-         @NotBlank(message = "El campo 'birthday' no puede ser nulo o vacío.")
+         @NotNull(message = "El campo 'birthday' no puede ser nulo o vacío.")
+         @Past(message = "La fecha de nacimiento debe estar en el pasado.")
          LocalDate birthday,
 
         //@Schema(description = "Salario del usuario", example = "1500000")
@@ -29,6 +30,12 @@ public record UserRequestDto(
 
          @Email(message = "El formato del 'email' no es válido.")
         @NotBlank(message = "El campo email no puede estar vacío")
-         String email
+         String email,
+
+        @NotBlank(message = "La contraseña es obligatoria")
+                @Size(min = 8, message = "La contraseña debe tener al menos 8 carácteres.")
+        String password
 ) {
+
+
 }

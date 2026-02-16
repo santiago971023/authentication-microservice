@@ -1,4 +1,4 @@
-package com.auth_service.infraestructure.dto;
+package com.auth_service.infraestructure.entryPoints.dto;
 
 import java.math.BigDecimal;
 
