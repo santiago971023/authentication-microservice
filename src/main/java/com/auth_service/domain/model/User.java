@@ -13,7 +13,7 @@ public class User {
     private LocalDate birthday;
     private BigDecimal baseSalary;
     private String email;
-    //private String password;
+    private String password;
     private Role role;
 
     public Long getId() {
@@ -72,13 +72,13 @@ public class User {
         this.email = email;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Role getRole() {
         return role;
