@@ -4,6 +4,7 @@ import com.auth_service.application.ports.in.UserInputPort;
 import com.auth_service.infraestructure.entryPoints.dto.UserRequestDto;
 import com.auth_service.infraestructure.mapper.UserRestMapper;
 import com.auth_service.infraestructure.shared.RequestValidator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -13,6 +14,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 
 @Component
+@Slf4j
 public class UserHandler {
     private final UserInputPort userInputPort;
     private final RequestValidator requestValidator;
@@ -27,6 +29,7 @@ public class UserHandler {
     public Mono<ServerResponse> createUser(ServerRequest serverRequest){
         // 1. Convertir el body (JSON) a DTO
         return serverRequest.bodyToMono(UserRequestDto.class)
+                .doOnNext(dto -> log.info("Solicitud de registro recibida para DNI: {}" , dto.dni()))
                 // 2. Aquí vamos a tener que validar el DTO
                 .flatMap(requestValidator::validate)
 
@@ -36,10 +39,12 @@ public class UserHandler {
 
                 // 4.  Converttirmos respuesta Domain a DTO y respondemos CREATED
                 .map(userRestMapper::toResponse)
+                .doOnNext(response -> log.info("Usuario creado exitosamente con ID: {}", response.id()))
                 .flatMap(userResponse -> ServerResponse
                         .created(URI.create("/api/users/" + userResponse.id()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(userResponse)
+
                 );
     }
 }
