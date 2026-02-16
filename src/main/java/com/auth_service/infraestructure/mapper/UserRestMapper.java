@@ -1,13 +1,15 @@
 package com.auth_service.infraestructure.mapper;
 
 import com.auth_service.domain.model.User;
-import com.auth_service.infraestructure.dto.UserRequestDto;
-import com.auth_service.infraestructure.dto.UserResponseDto;
+import com.auth_service.infraestructure.entryPoints.dto.UserRequestDto;
+import com.auth_service.infraestructure.entryPoints.dto.UserResponseDto;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface UserMapper {
+public interface UserRestMapper {
 
     User toDomain(UserRequestDto userRequestDto);
     UserResponseDto toResponse(User user);
+
+
 }
