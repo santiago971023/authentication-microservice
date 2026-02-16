@@ -28,6 +28,7 @@ public class UserHandler {
         // 1. Convertir el body (JSON) a DTO
         return serverRequest.bodyToMono(UserRequestDto.class)
                 // 2. Aquí vamos a tener que validar el DTO
+                .flatMap(requestValidator::validate)
 
                 // 3. Convertir DTO a Dominio y llamar al Caso de Uso (por medio del puerto)
                 .map(userRestMapper::toDomain)
