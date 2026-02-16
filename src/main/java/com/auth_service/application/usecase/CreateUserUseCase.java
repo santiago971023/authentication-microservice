@@ -2,6 +2,7 @@ package com.auth_service.application.usecase;
 
 import com.auth_service.application.ports.in.UserInputPort;
 import com.auth_service.application.ports.out.UserRepositoryOutPort;
+import com.auth_service.domain.exception.UserAlreadyExistsException;
 import com.auth_service.domain.model.User;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -20,7 +21,7 @@ public class CreateUserUseCase implements UserInputPort {
         return userRepositoryOutPort.existsByEmail(user.getEmail()).
                 flatMap(exists -> {
                         if(exists) {
-                            return Mono.error(new RuntimeException("The email already exists"));
+                            return Mono.error(new UserAlreadyExistsException("The email already exists"));
                         }
                         return userRepositoryOutPort.save(user);
         });
