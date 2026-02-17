@@ -6,6 +6,7 @@ import com.auth_service.domain.exception.UserAlreadyExistsException;
 import com.auth_service.domain.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -19,6 +20,7 @@ public class CreateUserUseCase implements UserInputPort {
     }
 
     @Override
+    @Transactional
     public Mono<User> saveUser(User user) {
         log.debug("Iniciando validación de negocio para usuario: {}", user.getDni());
         return userRepositoryOutPort.existsByDni(user.getDni())
