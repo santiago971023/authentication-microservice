@@ -7,5 +7,6 @@ public interface UserRepositoryOutPort {
 
     Mono<User> save(User user);
     Mono<Boolean> existsByEmail(String email);
+    Mono<Boolean> existsByDni(String dni);
 
 }

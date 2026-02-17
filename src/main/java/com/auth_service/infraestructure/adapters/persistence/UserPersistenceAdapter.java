@@ -3,7 +3,6 @@ package com.auth_service.infraestructure.adapters.persistence;
 import com.auth_service.application.ports.out.UserRepositoryOutPort;
 import com.auth_service.domain.model.User;
 import com.auth_service.infraestructure.adapters.persistence.mapper.UserPersistenceMapper;
-import com.auth_service.infraestructure.mapper.UserRestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -36,5 +35,10 @@ public class UserPersistenceAdapter implements UserRepositoryOutPort {
     @Override
     public Mono<Boolean> existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Mono<Boolean> existsByDni(String dni) {
+        return userRepository.existsByDni(dni);
     }
 }

@@ -11,10 +11,6 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 
-
-
-
-
 @Configuration
 public class UserRouter {
 

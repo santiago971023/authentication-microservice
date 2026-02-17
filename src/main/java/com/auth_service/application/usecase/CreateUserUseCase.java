@@ -20,19 +20,25 @@ public class CreateUserUseCase implements UserInputPort {
 
     @Override
     public Mono<User> saveUser(User user) {
-        log.debug("Iniciando validación de negocio para usuario: {}", user.getEmail());
+        log.debug("Iniciando validación de negocio para usuario: {}", user.getDni());
+        return userRepositoryOutPort.existsByDni(user.getDni())
+                .flatMap(dniExists -> {
+                    if (dniExists) {
+                        log.warn("Intento de registro fallido: DNI {} ya existe", user.getDni());
+                        return Mono.error(new UserAlreadyExistsException("The DNI already exists"));
+                    }
+                    return userRepositoryOutPort.existsByEmail(user.getEmail());
+                })
+                .flatMap(emailExists -> {
+                    if (emailExists) {
+                        log.warn("Intento de registro fallido: Email {} ya existe", user.getEmail());
+                        return Mono.error(new UserAlreadyExistsException("The email already exists"));
+                    }
 
-        return userRepositoryOutPort.existsByEmail(user.getEmail()).
-                flatMap(exists -> {
-                        if(exists) {
-                            log.warn("Intento de registro fallido: Email {} ya existe", user.getEmail());
-                            return Mono.error(new UserAlreadyExistsException("The email already exists"));
-                        }
+                    // Aquí debemos hashear la contraseña.
 
-                        // Aquí debemos hashear la contraseña.
-
-                        return userRepositoryOutPort.save(user)
-                                .doOnSuccess(u -> log.info("Usuario persistido correctamente en base de datos. ID: {}", u.getId()));
-        });
+                    return userRepositoryOutPort.save(user)
+                            .doOnSuccess(u -> log.info("Usuario persistido correctamente en base de datos. ID: {}", u.getId()));
+                });
     }
 }

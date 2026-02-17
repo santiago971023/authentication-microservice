@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface UserRepository extends ReactiveCrudRepository<UserEntity, Long> {
     Mono<Boolean> existsByEmail(String email);
+    Mono<Boolean> existsByDni(String dni);
 }
