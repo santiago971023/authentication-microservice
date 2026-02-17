@@ -1,5 +1,6 @@
 package com.auth_service.infraestructure.entryPoints.exception;
 
+import com.auth_service.domain.exception.UserAlreadyExistsException;
 import com.auth_service.infraestructure.entryPoints.dto.ErrorDetailDto;
 import com.auth_service.infraestructure.entryPoints.dto.ErrorResponseDto;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,12 @@ public class GlobalExceptionHandler {
 
     }
 
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public Mono<ResponseEntity<ErrorResponseDto>> handleUserExists(UserAlreadyExistsException ex){
+        return buildErrorResponse("USER_ALREADY_EXISTS", ex.getMessage(), null, HttpStatus.CONFLICT);
+    }
+
     // Este método evita que repitamos el código de .builder() y ResponseEntity una y otra vez.
     private Mono<ResponseEntity<ErrorResponseDto>> buildErrorResponse(
             String code,
@@ -46,8 +53,7 @@ public class GlobalExceptionHandler {
         ErrorResponseDto response = ErrorResponseDto.builder()
                 .code(code)
                 .message(message)
-                .errors(details) // Si es null, Jackson simplemente no lo mostrará (si pusiste @JsonInclude)
-                // .timestamp(LocalDateTime.now()) // Descomenta si tu DTO tiene timestamp
+                .errors(details)
                 .build();
 
         return Mono.just(ResponseEntity.status(status).body(response));
