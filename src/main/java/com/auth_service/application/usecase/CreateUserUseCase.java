@@ -43,4 +43,11 @@ public class CreateUserUseCase implements UserInputPort {
                             .doOnSuccess(u -> log.info("Usuario persistido correctamente en base de datos. ID: {}", u.getId()));
                 });
     }
+
+    @Override
+    public Mono<Boolean> existsByDni(String dni) {
+        log.debug("Verificando existencia de usuario con DNI: {}", dni);
+        return userRepositoryOutPort.existsByDni(dni)
+                .doOnSuccess(exists -> log.debug("DNI {} existe: {}", dni, exists));
+    }
 }

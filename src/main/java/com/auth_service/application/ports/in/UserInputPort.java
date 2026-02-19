@@ -7,4 +7,6 @@ public interface UserInputPort {
 
     Mono<User> saveUser(User user);
 
+    Mono<Boolean> existsByDni(String dni);
+
 }

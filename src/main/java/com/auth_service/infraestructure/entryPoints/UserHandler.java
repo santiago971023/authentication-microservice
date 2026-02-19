@@ -47,4 +47,15 @@ public class UserHandler {
 
                 );
     }
+
+    public Mono<ServerResponse> existsByDni(ServerRequest serverRequest) {
+        String dni = serverRequest.pathVariable("dni");
+        log.info("Consulta de existencia de usuario con DNI: {}", dni);
+
+        return userInputPort.existsByDni(dni)
+                .flatMap(exists -> ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(exists));
+    }
 }
