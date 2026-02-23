@@ -41,4 +41,10 @@ public class UserPersistenceAdapter implements UserRepositoryOutPort {
     public Mono<Boolean> existsByDni(String dni) {
         return userRepository.existsByDni(dni);
     }
+
+    @Override
+    public Mono<User> findByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .map(persistenceMapper::toDomain);
+    }
 }
