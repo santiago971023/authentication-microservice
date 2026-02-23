@@ -16,3 +16,7 @@ spring:
   logging:
     level:
       org.springframework.r2dbc: DEBUG
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
