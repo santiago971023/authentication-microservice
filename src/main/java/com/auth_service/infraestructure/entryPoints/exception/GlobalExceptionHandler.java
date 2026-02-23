@@ -14,7 +14,7 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1. MAnejar los errores de validación:
+    // 1. Manejar los errores de validación:
     @ExceptionHandler(ConstraintViolationException.class)
     public Mono<ResponseEntity<ErrorResponseDto>> handleConstraintViolation(ConstraintViolationException ex){
 
