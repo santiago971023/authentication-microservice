@@ -1,8 +1,10 @@
 package com.auth_service.infraestructure.adapters.jwt;
 
 import com.auth_service.application.ports.out.TokenProviderOutPort;
+import com.auth_service.domain.model.TokenClaims;
 import com.auth_service.domain.model.User;
 import com.auth_service.infraestructure.config.JwtProperties;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -55,6 +57,21 @@ public class JwtTokenProviderAdapter implements TokenProviderOutPort {
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
 
+    }
+
+    @Override
+    public TokenClaims getAllClaimsFromToken(String token) {
+        Claims libraryClaims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return TokenClaims.builder()
+                .userId(libraryClaims.get("userId", Long.class))
+                .email(libraryClaims.getSubject())
+                .role(libraryClaims.get("role", String.class))
+                .build();
     }
 
 }
