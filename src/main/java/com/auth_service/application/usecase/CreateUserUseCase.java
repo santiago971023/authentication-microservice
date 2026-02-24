@@ -1,6 +1,7 @@
 package com.auth_service.application.usecase;
 
 import com.auth_service.application.ports.in.UserInputPort;
+import com.auth_service.application.ports.out.PasswordEncoderOutPort;
 import com.auth_service.application.ports.out.UserRepositoryOutPort;
 import com.auth_service.domain.exception.UserAlreadyExistsException;
 import com.auth_service.domain.model.User;
@@ -14,9 +15,11 @@ import reactor.core.publisher.Mono;
 public class CreateUserUseCase implements UserInputPort {
 
     private final UserRepositoryOutPort userRepositoryOutPort;
+    private final PasswordEncoderOutPort passwordEncoderOutPort;
 
-    public CreateUserUseCase(UserRepositoryOutPort userRepositoryOutPort) {
+    public CreateUserUseCase(UserRepositoryOutPort userRepositoryOutPort, PasswordEncoderOutPort passwordEncoderOutPort) {
         this.userRepositoryOutPort = userRepositoryOutPort;
+        this.passwordEncoderOutPort = passwordEncoderOutPort;
     }
 
     @Override
@@ -35,10 +38,10 @@ public class CreateUserUseCase implements UserInputPort {
                     if (emailExists) {
                         log.warn("Intento de registro fallido: Email {} ya existe", user.getEmail());
                         return Mono.error(new UserAlreadyExistsException("The email already exists"));
+                    } else {
+                        String encodedPassword = passwordEncoderOutPort.encode(user.getPassword());
+                        user.setPassword(encodedPassword);
                     }
-
-                    // Aquí debemos hashear la contraseña.
-
                     return userRepositoryOutPort.save(user)
                             .doOnSuccess(u -> log.info("Usuario persistido correctamente en base de datos. ID: {}", u.getId()));
                 });
