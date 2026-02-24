@@ -8,8 +8,10 @@ import com.auth_service.application.ports.out.UserRepositoryOutPort;
 import com.auth_service.domain.exception.ErrorMessageBusiness;
 import com.auth_service.domain.exception.InvalidCredentialsException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+@Service
 @Slf4j
 public class LoginUseCase implements LoginInputPort {
 
