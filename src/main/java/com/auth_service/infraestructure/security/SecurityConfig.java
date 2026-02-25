@@ -33,6 +33,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         // Rutas públicas
                         .pathMatchers("/api/v1/users/login").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/api/v1/users/exists/**").permitAll()
 
                         // Rutas protegidas por el rol
                         .pathMatchers(HttpMethod.POST, "/api/v1/users").hasAnyRole("ADMIN", "CONSULTANT")
