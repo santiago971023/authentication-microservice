@@ -47,6 +47,7 @@ public class JwtTokenProviderAdapter implements TokenProviderOutPort {
         claims.put("userId", user.getId());
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole().name());
+        claims.put("dni", user.getDni());
 
 
         return Jwts.builder()
