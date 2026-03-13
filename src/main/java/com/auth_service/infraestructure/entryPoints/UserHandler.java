@@ -58,4 +58,15 @@ public class UserHandler {
                         .contentType(MediaType.APPLICATION_JSON)
                         .bodyValue(exists));
     }
+
+    public Mono<ServerResponse> findUserByDni(ServerRequest serverRequest){
+        String dni = serverRequest.pathVariable("dni");
+        log.info("Consultando cliente por DNI...");
+
+        return userInputPort.findUserByDni(dni)
+                .flatMap(user -> ServerResponse
+                        .ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .bodyValue(user));
+    }
 }

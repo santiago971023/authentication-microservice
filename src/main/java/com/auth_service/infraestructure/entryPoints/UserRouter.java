@@ -25,7 +25,12 @@ public class UserRouter {
         ).andRoute(
                 GET(PATH + "/exists/{dni}"),
                 userHandler::existsByDni
-        );
+        ).andRoute(
+                GET(PATH + "/{dni}"),
+                userHandler::findUserByDni
+        )
+
+                ;
     }
 
 }
