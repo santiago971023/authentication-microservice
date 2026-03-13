@@ -37,6 +37,7 @@ public class SecurityConfig {
 
                         // Rutas protegidas por el rol
                         .pathMatchers(HttpMethod.POST, "/api/v1/users").hasAnyRole("ADMIN", "CONSULTANT")
+                        .pathMatchers(HttpMethod.POST, "/api/v1/users/**").hasAnyRole("ADMIN", "CONSULTANT")
 
                         .anyExchange().authenticated()
                 )
