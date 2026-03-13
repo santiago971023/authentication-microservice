@@ -9,4 +9,6 @@ public interface UserInputPort {
 
     Mono<Boolean> existsByDni(String dni);
 
+    Mono<User> findUserByDni(String dni);
+
 }

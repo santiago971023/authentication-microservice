@@ -11,5 +11,6 @@ public interface UserRepositoryOutPort {
     Mono<Boolean> existsByEmail(String email);
     Mono<Boolean> existsByDni(String dni);
     Mono<User> findByEmail(String email);
+    Mono<User> findByDni(String dni);
 
 }

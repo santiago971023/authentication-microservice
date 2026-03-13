@@ -53,4 +53,9 @@ public class CreateUserUseCase implements UserInputPort {
         return userRepositoryOutPort.existsByDni(dni)
                 .doOnSuccess(exists -> log.debug("DNI {} existe: {}", dni, exists));
     }
+
+    @Override
+    public Mono<User> findUserByDni(String dni) {
+        return userRepositoryOutPort.findByDni(dni);
+    }
 }
